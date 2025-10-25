@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>💎 متجر CR7 للشحن 💎</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #d4af37;
+      font-family: "Tajawal", sans-serif;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    header {
+      background: linear-gradient(90deg, #000, #222);
+      padding: 20px;
+      font-size: 1.8em;
+      font-weight: bold;
+      border-bottom: 2px solid #d4af37;
+    }
+    .container {
+      max-width: 450px;
+      margin: 50px auto;
+      background-color: #111;
+      border: 2px solid #d4af37;
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: 0 0 15px #d4af37;
+    }
+    input, select, button {
+      width: 90%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      font-size: 1em;
+    }
+    input, select {
+      background: #222;
+      color: #d4af37;
+      border: 1px solid #d4af37;
+    }
+    button {
+      background-color: #d4af37;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background-color: #fff;
+    }
+    footer {
+      margin-top: 40px;
+      font-size: 0.9em;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+  <header>🚀 متجر CR7 للشحن</header>
+
+  <div class="container">
+    <h2>أرسل طلب الشحن 🔋</h2>
+    <form id="orderForm">
+      <input type="text" id="username" placeholder="اسم المستخدم في اللعبة" required />
+      <select id="service" required>
+        <option value="">اختر نوع الشحن</option>
+        <option>شحن ببجي</option>
+        <option>شحن فري فاير</option>
+        <option>شحن كوينز فيفا</option>
+        <option>شحن دايموند موبايل ليجند</option>
+      </select>
+      <input type="number" id="amount" placeholder="المبلغ بالدولار 💵" required />
+      <button type="submit">إرسال الطلب ✈️</button>
+    </form>
+    <p id="status"></p>
+  </div>
+
+  <footer>جميع الحقوق محفوظة © CR7 STORE</footer>
+
+  <script>
+    document.getElementById("orderForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const username = document.getElementById("username").value;
+      const service = document.getElementById("service").value;
+      const amount = document.getElementById("amount").value;
+
+      document.getElementById("status").textContent = "⏳ جاري إرسال الطلب...";
+      try {
+        const res = await fetch("/طلب", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ الاسم: username, النوع: service, السعر: amount }),
+        });
+
+        if (res.ok) {
+          document.getElementById("status").textContent = "✅ تم إرسال الطلب بنجاح!";
+          document.getElementById("orderForm").reset();
+        } else {
+          document.getElementById("status").textContent = "❌ حدث خطأ أثناء الإرسال.";
+        }
+      } catch {
+        document.getElementById("status").textContent = "⚠️ خطأ في الاتصال بالخادم.";
+      }
+    });
+  </script>
+</body>
+</html>
