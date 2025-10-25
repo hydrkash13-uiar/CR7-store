@@ -1,0 +1,13 @@
+{
+  "name": "cr7-store",
+  "version": "1.0.0",
+  "description": "متجر CR7 لشحن البرامج",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "body-parser": "^1.20.2"
+  }
+}
