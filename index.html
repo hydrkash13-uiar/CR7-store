@@ -1,146 +1,59 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CR7 - متجر الشحن</title>
-  <style>
-    body {
-      background-color: #000;
-      color: #d4af37;
-      font-family: "Tajawal", sans-serif;
-      margin: 0;
-      padding: 0;
-      text-align: center;
-    }
-
-    header {
-      padding: 20px;
-      background: #111;
-      box-shadow: 0 0 10px #d4af37;
-    }
-
-    h1 {
-      font-size: 26px;
-      margin: 0;
-      color: #d4af37;
-    }
-
-    .container {
-      margin: 30px auto;
-      width: 90%;
-      max-width: 500px;
-    }
-
-    .card {
-      background: #111;
-      border: 2px solid #d4af37;
-      border-radius: 15px;
-      padding: 20px;
-      margin-bottom: 25px;
-      box-shadow: 0 0 10px #d4af37;
-    }
-
-    button {
-      background-color: #d4af37;
-      color: #000;
-      border: none;
-      padding: 12px 18px;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: 0.3s;
-      width: 100%;
-    }
-
-    button:hover {
-      background-color: #b8912e;
-    }
-
-    footer {
-      margin-top: 30px;
-      padding: 15px;
-      color: #999;
-      font-size: 14px;
-    }
-
-    input, select {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border-radius: 8px;
-      border: 1px solid #d4af37;
-      background: #000;
-      color: #fff;
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CR7 STORE 👑</title>
+<style>
+  body {
+    background:#000;
+    color:#d4af37;
+    font-family:'Cairo',sans-serif;
+    direction:rtl;
+    margin:0;
+    text-align:center;
+  }
+  header {
+    padding:30px;
+    background:linear-gradient(135deg,#d4af37,#b8860b);
+    color:#000;
+    border-radius:0 0 25px 25px;
+    box-shadow:0 2px 10px rgba(212,175,55,0.4);
+  }
+  h1 {font-size:2.3em;margin:0;font-weight:900;}
+  p {color:#000;font-weight:600;}
+  .links {
+    margin-top:50px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:20px;
+  }
+  a {
+    text-decoration:none;
+    color:#000;
+    background:linear-gradient(90deg,#d4af37,#ffd700);
+    padding:15px 25px;
+    border-radius:12px;
+    width:70%;
+    font-weight:800;
+    transition:0.3s;
+  }
+  a:hover {transform:scale(1.05);background:linear-gradient(90deg,#ffcf40,#d4af37);}
+</style>
 </head>
 <body>
-  <header>
-    <h1>🚀 متجر CR7 للشحن</h1>
-  </header>
 
-  <div class="container">
-    <div class="card">
-      <h2>💎 شحن رصيد</h2>
-      <input type="text" id="user" placeholder="أدخل اسم المستخدم أو الآيدي">
-      <select id="amount">
-        <option value="">اختر المبلغ</option>
-        <option value="5">5$</option>
-        <option value="10">10$</option>
-        <option value="25">25$</option>
-        <option value="50">50$</option>
-      </select>
-      <button onclick="sendToTelegram('شحن')">تأكيد الشحن</button>
-    </div>
+<header>
+  <h1>CR7 STORE 👑</h1>
+  <p>أهلاً بك في المتجر الرسمي للشحن والرصيد 💰</p>
+</header>
 
-    <div class="card">
-      <h2>💰 إضافة رصيد</h2>
-      <input type="text" id="addName" placeholder="اسم المستخدم">
-      <input type="number" id="addAmount" placeholder="المبلغ">
-      <button onclick="sendToTelegram('إضافة')">إرسال الطلب</button>
-    </div>
+<div class="links">
+  <a href="add-balance.html">💳 تأكيد الحوالة / إضافة رصيد</a>
+  <a href="charge.html">⚡ طلب شحن التطبيقات</a>
+</div>
 
-    <div class="card">
-      <h2>📩 تأكيد الحوالة</h2>
-      <input type="text" id="transferName" placeholder="اسم المرسل">
-      <input type="number" id="transferAmount" placeholder="المبلغ">
-      <input type="text" id="transferMethod" placeholder="وسيلة الدفع (مثل: OMT أو غيرها)">
-      <button onclick="sendToTelegram('تأكيد')">تأكيد التحويل</button>
-    </div>
-  </div>
-
-  <footer>© 2025 CR7 Store | جميع الحقوق محفوظة</footer>
-
-  <script>
-    const botToken = "ضع_توكن_البوت_هنا";
-    const chatId = "ضع_معرف_التليجرام_هنا";
-
-    function sendToTelegram(type) {
-      let message = "";
-      if (type === "شحن") {
-        const user = document.getElementById("user").value;
-        const amount = document.getElementById("amount").value;
-        message = `🚀 طلب شحن جديد:\n👤 المستخدم: ${user}\n💵 المبلغ: ${amount}$`;
-      } else if (type === "إضافة") {
-        const name = document.getElementById("addName").value;
-        const amount = document.getElementById("addAmount").value;
-        message = `💰 طلب إضافة رصيد:\n👤 الاسم: ${name}\n💵 المبلغ: ${amount}$`;
-      } else if (type === "تأكيد") {
-        const name = document.getElementById("transferName").value;
-        const amount = document.getElementById("transferAmount").value;
-        const method = document.getElementById("transferMethod").value;
-        message = `📩 تأكيد حوالة:\n👤 المرسل: ${name}\n💵 المبلغ: ${amount}$\n💳 الوسيلة: ${method}`;
-      }
-
-      if (message) {
-        fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ chat_id: chatId, text: message })
-        }).then(() => alert("✅ تم إرسال الطلب بنجاح!"));
-      }
-    }
-  </script>
 </body>
 </html>
+
