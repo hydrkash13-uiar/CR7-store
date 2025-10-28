@@ -1,92 +1,116 @@
-0<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BIGO LIVE - شحن الرصيد</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CR7 👑 STORE</title>
 <style>
   body {
     background: #000;
     color: #d4af37;
     font-family: 'Cairo', sans-serif;
     direction: rtl;
-    padding: 20px;
+    margin: 0;
+    padding: 0;
   }
-  h1 {
+
+  header {
     text-align: center;
-  }
-  .card {
-    background: #111;
-    padding: 20px;
-    border-radius: 10px;
-    max-width: 500px;
-    margin: 20px auto;
-  }
-  label {
-    display: block;
-    margin-top: 8px;
-  }
-  input, textarea {
-    width: 100%;
-    padding: 8px;
-    margin-top: 5px;
-    background: #000;
-    border: 1px solid #d4af37;
-    color: #d4af37;
-    border-radius: 6px;
-  }
-  button {
-    margin-top: 12px;
-    background: #d4af37;
+    padding: 25px 10px;
+    background: linear-gradient(135deg, #d4af37, #b8860b);
     color: #000;
-    border: none;
-    padding: 10px;
+    border-radius: 0 0 25px 25px;
+    box-shadow: 0 2px 15px rgba(212,175,55,0.4);
+  }
+
+  header img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+  }
+
+  h1 {
+    margin: 10px 0 0;
+    font-size: 2em;
+    font-weight: 900;
+  }
+
+  .apps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 30px;
+  }
+
+  .app {
+    background: #111;
+    padding: 15px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(212,175,55,0.3);
+  }
+
+  .app img {
     width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 12px;
+  }
+
+  .app h3 {
+    margin: 10px 0;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 10px 15px;
+    background: linear-gradient(90deg, #d4af37, #ffd700);
+    color: #000;
+    font-weight: bold;
     border-radius: 8px;
-    font-weight: 700;
-    cursor: pointer;
+    text-decoration: none;
+    transition: 0.3s;
+  }
+
+  .btn:hover {
+    background: linear-gradient(90deg, #ffcf40, #d4af37);
+    transform: scale(1.05);
   }
 </style>
 </head>
 <body>
-  <h1>شحن BIGO LIVE 💰</h1>
-  <div class="card">
-    <label>الاسم</label>
-    <input id="name" placeholder="اكتب اسمك">
-    <label>ID المستخدم</label>
-    <input id="uid" placeholder="مثال: 123456789">
-    <label>المبلغ (USD)</label>
-    <input id="amount" type="number" min="1" placeholder="ادخل المبلغ">
-    <label>ملاحظة</label>
-    <textarea id="note" placeholder="اكتب أي ملاحظات إضافية"></textarea>
-    <button onclick="sendWhatsApp()">إرسال الطلب عبر واتساب</button>
+
+<header>
+  <img src="cr7logo.png" alt="CR7 Logo">
+  <h1>CR7 👑 STORE</h1>
+  <p>خدمات الشحن والدعم عبر واتساب</p>
+</header>
+
+<div class="apps">
+  <div class="app">
+    <img src="bigo.jpg" alt="BIGO LIVE">
+    <h3>BIGO LIVE</h3>
+    <a class="btn" href="https://wa.me/963957761415?text=مرحبا%20اريد%20شحن%20BIGO%20LIVE">شحن الآن 💰</a>
   </div>
 
-<script>
-function sendWhatsApp() {
-  const name = document.getElementById('name').value.trim();
-  const uid = document.getElementById('uid').value.trim();
-  const amount = document.getElementById('amount').value.trim();
-  const note = document.getElementById('note').value.trim();
+  <div class="app">
+    <img src="binmo.jpg" alt="BINMO CHAT">
+    <h3>BINMO CHAT</h3>
+    <a class="btn" href="https://wa.me/963957761415?text=مرحبا%20اريد%20شحن%20BINMO%20CHAT">شحن الآن 💰</a>
+  </div>
 
-  if (!name || !uid || !amount) {
-    alert('❗ يرجى ملء جميع الحقول المطلوبة');
-    return;
-  }
+  <div class="app">
+    <img src="ahlan.jpg" alt="AHLAN CHAT">
+    <h3>AHLAN CHAT</h3>
+    <a class="btn" href="https://wa.me/963957761415?text=مرحبا%20اريد%20شحن%20AHLAN%20CHAT">شحن الآن 💰</a>
+  </div>
 
-  // ضع رقمك هنا 👇 (بدون +)
-  const phoneNumber =963957761415
+  <div class="app">
+    <img src="yoho.jpg" alt="YOHO WAKA">
+    <h3>YOHO WAKA</h3>
+    <a class="btn" href="https://wa.me/963957761415?text=مرحبا%20اريد%20شحن%20YOHO%20WAKA">شحن الآن 💰</a>
+  </div>
+</div>
 
-  const message = `طلب شحن جديد 💰%0A
-التطبيق: BIGO LIVE%0A
-الاسم: ${name}%0A
-ID المستخدم: ${uid}%0A
-المبلغ: ${amount}$%0A
-ملاحظات: ${note || "لا توجد"}%0A`;
-
-  const url = `https://wa.me/${phoneNumber}?text=${message}`;
-  window.open(url, "_blank");
-}
-</script>
 </body>
 </html>
