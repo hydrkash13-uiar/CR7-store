@@ -1,21 +1,19 @@
 // server.js
 const express = require("express");
 const axios = require("axios");
+const path = require("path");
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.static(path.join(__dirname, "public"))); // لملفات HTML
 
-// اقرأ التوكن والآيدي من متغيرات البيئة
-const BOT_TOKEN = process.env.BOT_TOKEN || "8320518414:AAGdxd980hx5Snp7L5Q-ZQrXe89O98zF5Fc";
-const CHAT_ID = process.env.CHAT_ID || "8320518414";
+// 🔐 التوكن والآيدي ثابتين هنا:
+const BOT_TOKEN = "8320518414:AAGdxd980hx5Snp7L5Q-ZQrXe89O98zF5Fc";
+const CHAT_ID = "8202412204";
 
-// دالة ترسل رسالة لتليجرام
+// 📨 دالة إرسال الرسائل إلى التليجرام
 async function sendTelegramMessage(text) {
-  if (!BOT_TOKEN || !CHAT_ID) {
-    console.error("BOT_TOKEN or CHAT_ID missing");
-    return;
-  }
   try {
     await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
       chat_id: CHAT_ID,
@@ -23,33 +21,34 @@ async function sendTelegramMessage(text) {
       parse_mode: "HTML"
     });
   } catch (err) {
-    console.error("Telegram send error:", err.response ? err.response.data : err.message);
+    console.error("❌ خطأ في إرسال الرسالة:", err.response ? err.response.data : err.message);
   }
 }
 
-// صفحة فورم بسيطة لتجربة الطلب
+// 🏠 الصفحة الرئيسية
 app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/index.html");
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// استقبال طلب الشحن من الفورم
+// 📦 استقبال الطلبات من النموذج
 app.post("/order", async (req, res) => {
   const { name, userId, amount, note, appName } = req.body;
   const message = `
-✨ طلب جديد من المتجر:
-- التطبيق: ${appName || "غير محدد"}
-- الاسم: ${name || "-"}
-- ID المستخدم: ${userId || "-"}
-- المبلغ: ${amount || "-"}
-- ملاحظة: ${note || "-"}
-
+🚀 <b>طلب جديد من متجر CR7</b>
+━━━━━━━━━━━━━━━
+💬 التطبيق: ${appName || "غير محدد"}
+👤 الاسم: ${name || "-"}
+🆔 ID المستخدم: ${userId || "-"}
+💰 المبلغ: ${amount || "-"}
+📝 ملاحظة: ${note || "-"}
+━━━━━━━━━━━━━━━
+📅 تم الإرسال من موقع المتجر الرسمي.
 `;
+
   await sendTelegramMessage(message);
-  return res.send("تم إرسال الطلب، شكراً!");
+  res.send(`<h2 style="text-align:center; font-family:Arial;">✅ تم إرسال الطلب بنجاح! سيتم التواصل معك قريباً.</h2>`);
 });
 
-// شغّل السيرفر على البورت الذي يحدده Render
+// 🚀 تشغيل السيرفر
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log("Server running on port", PORT);
-});
+app.listen(PORT, () => console.log("✅ Server running on port " + PORT));
