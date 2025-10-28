@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CR7 STORE - إرسال طلب</title>
+<style>
+  body {
+    background-color: #000;
+    color: #d4af37;
+    font-family: Arial, sans-serif;
+    direction: rtl;
+    text-align: center;
+    padding: 30px;
+  }
+  h1 {
+    margin-bottom: 20px;
+    color: #d4af37;
+  }
+  form {
+    background: #111;
+    border: 1px solid #d4af37;
+    border-radius: 12px;
+    padding: 20px;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  input, textarea, select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 10px;
+    border-radius: 6px;
+    border: 1px solid #d4af37;
+    background: #000;
+    color: #fff;
+  }
+  button {
+    margin-top: 15px;
+    background: #d4af37;
+    color: #000;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  button:hover {
+    background: #c9a233;
+  }
+</style>
+</head>
+<body>
+  <h1>👑 CR7 STORE</h1>
+  <h3>أرسل طلب الشحن وسيصلك الرد على تليجرام</h3>
+
+  <form action="/order" method="POST">
+    <label>اسم التطبيق</label>
+    <select name="appName" required>
+      <option value="BIGO LIVE">BIGO LIVE</option>
+      <option value="BINMO CHAT">BINMO CHAT</option>
+      <option value="AHLAN CHAT">AHLAN CHAT</option>
+      <option value="YOHO WAKA">YOHO WAKA</option>
+    </select>
+
+    <label>الاسم الكامل</label>
+    <input type="text" name="name" required>
+
+    <label>ID المستخدم</label>
+    <input type="text" name="userId" required>
+
+    <label>المبلغ (USD)</label>
+    <input type="number" name="amount" min="1" required>
+
+    <label>ملاحظات إضافية</label>
+    <textarea name="note" placeholder="اكتب أي تفاصيل إضافية..."></textarea>
+
+    <button type="submit">إرسال الطلب 🚀</button>
+  </form>
+</body>
+</html>
