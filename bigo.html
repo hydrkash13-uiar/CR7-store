@@ -1,38 +1,115 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>شحن BIGO LIVE</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HaydarRof - متجر الشحن</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Tajawal', sans-serif;
+      background: #111;
+      color: #fff;
+      direction: rtl;
+    }
+    header {
+      background: linear-gradient(90deg, #222, #000);
+      padding: 15px;
+      text-align: center;
+      font-size: 1.8em;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+      padding: 20px;
+    }
+    .card {
+      background: #1c1c1c;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0,0,0,0.4);
+      text-align: center;
+      transition: transform 0.3s;
+    }
+    .card:hover {
+      transform: scale(1.05);
+    }
+    .card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+    }
+    .card h3 {
+      margin: 10px 0 5px;
+    }
+    .card p {
+      color: #aaa;
+      font-size: 0.9em;
+      margin-bottom: 10px;
+    }
+    .btn {
+      display: inline-block;
+      margin-bottom: 15px;
+      padding: 8px 15px;
+      background: #0088cc;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 1em;
+      transition: background 0.3s;
+    }
+    .btn:hover {
+      background: #0ab1ff;
+    }
+    footer {
+      text-align: center;
+      padding: 15px;
+      font-size: 0.9em;
+      color: #888;
+      background: #000;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
-  <header>
-    <h1>شحن BIGO LIVE 💰</h1>
-  </header>
+  <header>HaydarRof - متجر الشحن</header>
 
-  <div class="app-card" style="max-width:400px;margin:30px auto;">
-    <label>الاسم</label>
-    <input id="name" placeholder="اكتب اسمك">
-    <label>ID المستخدم</label>
-    <input id="uid" placeholder="مثلاً 12345678">
-    <label>المبلغ (USD)</label>
-    <input id="amount" type="number" min="1">
-    <label>ملاحظة (اختياري)</label>
-    <textarea id="note"></textarea>
-    <button class="btn" onclick="sendWhatsApp()">إرسال الطلب</button>
-  </div>
+  <section class="products">
+    <div class="card">
+      <img src="https://i.imgur.com/6f1H5Zp.png" alt="PUBG">
+      <h3>شحن PUBG</h3>
+      <p>اشحن شدات ببجي بسرعة وسهولة</p>
+      <a href="https://t.me/yourtelegram" class="btn">اشحن الآن</a>
+    </div>
 
-  <script>
-  function sendWhatsApp(){
-    const name=document.getElementById('name').value;
-    const uid=document.getElementById('uid').value;
-    const amount=document.getElementById('amount').value;
-    const note=document.getElementById('note').value;
-    if(!name||!uid||!amount){alert('يرجى تعبئة جميع الحقول');return;}
-    const msg=`طلب شحن BIGO LIVE%0Aالاسم: ${name}%0AID: ${uid}%0Aالمبلغ: ${amount}$%0Aملاحظة: ${note}`;
-    window.open(`https://wa.me/963957761415?text=${msg}`,'_blank');
-  }
-  </script>
+    <div class="card">
+      <img src="https://i.imgur.com/6QO7ZLq.png" alt="Free Fire">
+      <h3>شحن Free Fire</h3>
+      <p>احصل على الجواهر فوراً</p>
+      <a href="https://t.me/yourtelegram" class="btn">اشحن الآن</a>
+    </div>
+
+    <div class="card">
+      <img src="https://i.imgur.com/Ex1M0fw.png" alt="Google Play">
+      <h3>بطاقات Google Play</h3>
+      <p>متوفر لجميع الدول</p>
+      <a href="https://t.me/yourtelegram" class="btn">اطلب الآن</a>
+    </div>
+
+    <div class="card">
+      <img src="https://i.imgur.com/EeT3GZo.png" alt="iTunes">
+      <h3>بطاقات iTunes</h3>
+      <p>لشحن حسابات آبل ستور بسهولة</p>
+      <a href="https://t.me/yourtelegram" class="btn">اطلب الآن</a>
+    </div>
+  </section>
+
+  <footer>
+    © 2025 HaydarRof | جميع الحقوق محفوظة
+  </footer>
 </body>
 </html>
