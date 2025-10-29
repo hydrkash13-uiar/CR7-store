@@ -4,82 +4,35 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>شحن BIGO LIVE</title>
-<style>
-  body {
-    background: #000;
-    color: #d4af37;
-    font-family: 'Cairo', sans-serif;
-    direction: rtl;
-    margin: 0;
-    padding: 20px;
-  }
-  h1 {
-    text-align: center;
-    color: #d4af37;
-  }
-  .form-card {
-    background: #111;
-    border-radius: 15px;
-    max-width: 480px;
-    margin: 30px auto;
-    padding: 20px;
-    box-shadow: 0 0 20px rgba(212,175,55,0.2);
-  }
-  label {
-    display: block;
-    margin: 10px 0 5px;
-    font-weight: bold;
-  }
-  input, textarea {
-    width: 100%;
-    padding: 10px;
-    background: #000;
-    border: 1px solid #d4af37;
-    border-radius: 8px;
-    color: #d4af37;
-    font-size: 14px;
-  }
-  button {
-    width: 100%;
-    background: #d4af37;
-    color: #000;
-    border: none;
-    padding: 12px;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 15px;
-    transition: 0.3s;
-  }
-  button:hover {
-    background: #e6c65a;
-  }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <header>
+    <h1>شحن BIGO LIVE 💰</h1>
+  </header>
 
-  <h1>💰 شحن BIGO LIVE</h1>
-
-  <div class="form-card">
-    <form action="/order" method="POST">
-      <input type="hidden" name="appName" value="BIGO LIVE">
-
-      <label>الاسم</label>
-      <input type="text" name="name" required>
-
-      <label>ID المستخدم</label>
-      <input type="text" name="userId" required>
-
-      <label>المبلغ (USD)</label>
-      <input type="number" name="amount" required>
-
-      <label>ملاحظة</label>
-      <textarea name="note"></textarea>
-
-      <button type="submit">إرسال الطلب</button>
-    </form>
+  <div class="app-card" style="max-width:400px;margin:30px auto;">
+    <label>الاسم</label>
+    <input id="name" placeholder="اكتب اسمك">
+    <label>ID المستخدم</label>
+    <input id="uid" placeholder="مثلاً 12345678">
+    <label>المبلغ (USD)</label>
+    <input id="amount" type="number" min="1">
+    <label>ملاحظة (اختياري)</label>
+    <textarea id="note"></textarea>
+    <button class="btn" onclick="sendWhatsApp()">إرسال الطلب</button>
   </div>
 
+  <script>
+  function sendWhatsApp(){
+    const name=document.getElementById('name').value;
+    const uid=document.getElementById('uid').value;
+    const amount=document.getElementById('amount').value;
+    const note=document.getElementById('note').value;
+    if(!name||!uid||!amount){alert('يرجى تعبئة جميع الحقول');return;}
+    const msg=`طلب شحن BIGO LIVE%0Aالاسم: ${name}%0AID: ${uid}%0Aالمبلغ: ${amount}$%0Aملاحظة: ${note}`;
+    window.open(`https://wa.me/963957761415?text=${msg}`,'_blank');
+  }
+  </script>
 </body>
 </html>
