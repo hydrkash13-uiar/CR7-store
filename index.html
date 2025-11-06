@@ -1,45 +1,479 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CR7 STORE 👑</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SOMA - متجر</title>
+  <style>
+    :root{
+      --bg:#0b0b0d; --gold:#d4af37; --muted:#bdbdbd; --card:#0f1113;
+      --accent:#1f2937; --danger:#e14b4b;
+    }
+    html,body{height:100%;margin:0;font-family:Tahoma, Arial, "Noto Naskh Arabic", sans-serif;direction:rtl}
+    body{background:linear-gradient(180deg,#050505 0%, #0b0b0d 100%); color:#fff; padding:16px;}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+    h1{margin:0;color:var(--gold)}
+    .container{display:grid;grid-template-columns:1fr 360px;gap:14px}
+    @media (max-width:900px){ .container{grid-template-columns:1fr} .sidebar{order:2} }
+    .card{background:linear-gradient(180deg,var(--card),#0b0b0d); padding:12px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.6)}
+    nav{display:flex;gap:6px;flex-wrap:wrap}
+    button, .btn{background:var(--gold);border:none;color:#000;padding:8px 10px;border-radius:8px;cursor:pointer;font-weight:600}
+    .btn-ghost{background:transparent;border:1px solid #2b2b2b;color:var(--muted)}
+    .list{display:flex;flex-direction:column;gap:10px}
+    .item{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:10px;background:rgba(255,255,255,0.02)}
+    .muted{color:var(--muted);font-size:14px}
+    .small{font-size:13px;color:var(--muted)}
+    input,select{padding:8px;border-radius:8px;border:1px solid #222;background:#060606;color:#fff}
+    .sidebar{position:sticky;top:16px;height:fit-content;display:flex;flex-direction:column;gap:12px}
+    .balance{font-size:22px;color:var(--gold);font-weight:700}
+    .section-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+    .notif-list{max-height:220px;overflow:auto;display:flex;flex-direction:column;gap:8px}
+    .order{border-left:3px solid var(--gold);padding:8px;border-radius:6px;background:rgba(255,255,255,0.015)}
+    footer{margin-top:16px;color:var(--muted);font-size:13px;text-align:center}
+    .admin-panel{display:grid;gap:8px}
+    .danger{background:var(--danger);color:#fff}
+  </style>
 </head>
 <body>
-  <header>
-    <h1>CR7 STORE 👑</h1>
-    <p>شحن سريع وآمن لتطبيقات البث والدردشة 💰</p>
-  </header>
 
-  <section class="apps">
-    <div class="app-card">
-      <img src="bigo.png" alt="BIGO LIVE">
-      <h3>BIGO LIVE</h3>
-      <a href="bigo.html" class="btn">شحن الآن</a>
+<header>
+  <div>
+    <h1>SOMA — متجر الشحن</h1>
+    <div class="small muted">نظام بسيط لإدارة التطبيقات والأرصدة مع إرسال الطلبات لتلجرام</div>
+  </div>
+
+  <nav>
+    <button id="open-login" class="btn">تسجيل / دخول</button>
+    <button id="open-admin" class="btn-ghost">لوحة المدير</button>
+  </nav>
+</header>
+
+<div class="container">
+
+  <!-- Main column -->
+  <main>
+
+    <!-- التطبيقات -->
+    <section class="card" style="margin-bottom:12px">
+      <div class="section-title">
+        <strong>تطبيقات الدردشة</strong>
+        <small class="muted">اختر تطبيقاً واضف إلى السلة</small>
+      </div>
+      <div id="apps" class="list"></div>
+    </section>
+
+    <!-- الارصدة -->
+    <section class="card" style="margin-bottom:12px">
+      <div class="section-title">
+        <strong>الأرصدة / بطاقات الشحن</strong>
+        <small class="muted">أسعار جاهزة وسهلة الشراء</small>
+      </div>
+      <div id="credits" class="list"></div>
+    </section>
+
+    <!-- اضافة رصيد (للمستخدم) -->
+    <section class="card" style="margin-bottom:12px">
+      <div class="section-title"><strong>إضافة رصيد لحسابك</strong></div>
+      <form id="add-balance-form" onsubmit="return false;" style="display:flex;gap:8px;flex-wrap:wrap">
+        <input id="add-amount" placeholder="المبلغ بالوحدة" inputmode="numeric" />
+        <select id="payment-method">
+          <option value="manual">دفع يدوي/تحويل</option>
+          <option value="fake">دفع تجريبي (للاختبار)</option>
+        </select>
+        <button class="btn" id="submit-add">أرسل طلب إضافة رصيد</button>
+      </form>
+      <div class="small muted" style="margin-top:8px">بعد إرسال الطلب سيُسجل كطلب والدفع يرسل لبوت التلجرام للإشعار.</div>
+    </section>
+
+    <!-- الطلبات -->
+    <section class="card">
+      <div class="section-title">
+        <strong>الدفعات و الطلبات</strong>
+        <div>
+          <button id="refresh-orders" class="btn-ghost">تحديث</button>
+        </div>
+      </div>
+      <div id="orders" class="list"></div>
+    </section>
+
+  </main>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="card">
+      <div class="small muted">رصيد حسابك</div>
+      <div class="balance" id="user-balance">0</div>
+      <div class="small muted">المستخدم الحالي: <span id="current-user">زائر</span></div>
+      <div style="margin-top:10px;display:flex;gap:8px">
+        <button id="go-cart" class="btn">عرض السلة</button>
+        <button id="logout" class="btn-ghost">خروج</button>
+      </div>
     </div>
 
-    <div class="app-card">
-      <img src="binmo.png" alt="BINMO CHAT">
-      <h3>BINMO CHAT</h3>
-      <a href="binmo.html" class="btn">شحن الآن</a>
+    <div class="card">
+      <div class="section-title"><strong>الإشعارات</strong></div>
+      <div class="notif-list" id="notifications"></div>
     </div>
 
-    <div class="app-card">
-      <img src="ahlan.png" alt="AHLAN CHAT">
-      <h3>AHLAN CHAT</h3>
-      <a href="ahlan.html" class="btn">شحن الآن</a>
+    <div class="card">
+      <div class="section-title"><strong>الدفاعات</strong><small class="muted">ميزات أمان بسيطة</small></div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <label><input type="checkbox" id="defense-login" /> حماية تسجيل الدخول (مثال)</label>
+        <label><input type="checkbox" id="defense-ip" /> حظر IP مشبوه (مثال)</label>
+      </div>
     </div>
 
-    <div class="app-card">
-      <img src="yoho.png" alt="YOHO WAKA">
-      <h3>YOHO WAKA</h3>
-      <a href="yoho.html" class="btn">شحن الآن</a>
+    <div class="card">
+      <div class="section-title"><strong>بوت التلجرام (الإشعارات)</strong></div>
+      <div class="small muted">إدخال التوكن والـ chat_id في الإعدادات للمزامنة</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+        <input id="tg-token" placeholder="BOT_TOKEN (ضع التوكن هنا)" />
+        <input id="tg-chat" placeholder="CHAT_ID (رقم الشات أو القناة)" />
+        <button id="save-tg" class="btn">حفظ</button>
+      </div>
     </div>
-  </section>
 
-  <footer>
-    <p>جميع الحقوق محفوظة © 2025 CR7 STORE</p>
-  </footer>
-</body>
-</html>
+  </aside>
+</div>
+
+<footer class="muted card">SOMA — نسخة تجريبية بسيطة. لكل تعديل برمجياتي أنا أساعدك خطوة بخطوة.</footer>
+
+<!-- Modal: Login / Register / Cart / Admin -->
+<div id="modal" style="position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.6);z-index:999">
+  <div class="card" style="width:100%;max-width:720px;direction:rtl">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <strong id="modal-title">تسجيل</strong>
+      <button id="close-modal" class="btn-ghost">إغلاق</button>
+    </div>
+
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+/* ========== بيانات افتراضية ========== */
+const SAMPLE_APPS = [
+  {id:'wh',name:'واتساب بوت',price:5,desc:'حزمة تشغيل واتساب - ترخيص شهري'},
+  {id:'tg',name:'تليجرام بوت',price:4,desc:'حزمة تليجرام - ترخيص شهري'},
+  {id:'ig',name:'انستغرام أدوات',price:6,desc:'باقة أدوات انستغرام'}
+];
+const SAMPLE_CREDITS = [
+  {id:'c10',name:'رصيد 10',price:10},
+  {id:'c25',name:'رصيد 25',price:25},
+  {id:'c50',name:'رصيد 50',price:50}
+];
+
+/* ========== إدارة التطبيق المحلي ========== */
+const state = {
+  user: null, // {id, name, balance}
+  cart: [],
+  orders: [],
+  notifications: [],
+  tg: {token:'', chat:''}
+};
+
+function saveState(){
+  localStorage.soma_state = JSON.stringify({users:db.users, orders:state.orders, tg:state.tg});
+}
+function loadState(){
+  try{
+    const s = JSON.parse(localStorage.soma_state || '{}');
+    state.orders = s.orders || [];
+    state.tg = s.tg || {token:'', chat:''};
+    if(s.users) db.users = s.users;
+  }catch(e){}
+}
+
+/* ========== قاعدة بيانات بسيطة في localStorage ========== */
+const db = {
+  users: {
+    // مثال حساب مدير: admin / pass: 1234
+    admin: {id:'admin',name:'مدير SOMA',pass:'1234',balance:1000,isAdmin:true},
+  }
+};
+
+/* ========== واجهة العرض ========== */
+const appsEl = document.getElementById('apps');
+const creditsEl = document.getElementById('credits');
+const ordersEl = document.getElementById('orders');
+const notificationsEl = document.getElementById('notifications');
+const userBalanceEl = document.getElementById('user-balance');
+const currentUserEl = document.getElementById('current-user');
+const tgTokenInput = document.getElementById('tg-token');
+const tgChatInput = document.getElementById('tg-chat');
+
+function renderApps(){ appsEl.innerHTML=''; SAMPLE_APPS.forEach(a=>{
+  const it = document.createElement('div'); it.className='item';
+  it.innerHTML = `<div><strong>${a.name}</strong><div class="small muted">${a.desc}</div></div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <div class="small muted">${a.price} USD</div>
+      <button class="btn" onclick="addToCart('${a.id}','app')">اشتري</button>
+    </div>`;
+  appsEl.appendChild(it);
+})}
+
+function renderCredits(){ creditsEl.innerHTML=''; SAMPLE_CREDITS.forEach(c=>{
+  const it = document.createElement('div'); it.className='item';
+  it.innerHTML = `<div><strong>${c.name}</strong></div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <div class="small muted">${c.price} USD</div>
+      <button class="btn" onclick="addToCart('${c.id}','credit')">اشتري</button>
+    </div>`;
+  creditsEl.appendChild(it);
+})}
+
+function renderOrders(){
+  ordersEl.innerHTML = '';
+  if(state.orders.length===0){ ordersEl.innerHTML = '<div class="small muted">لا توجد طلبات بعد</div>'; return }
+  state.orders.slice().reverse().forEach(o=>{
+    const it = document.createElement('div'); it.className='order';
+    it.innerHTML = `<div style="display:flex;justify-content:space-between">
+      <div><strong>طلب #${o.id}</strong><div class="small muted">من: ${o.user}</div></div>
+      <div class="small muted">${o.total} USD</div>
+    </div>
+    <div class="small muted" style="margin-top:6px">${o.status} — ${o.note||''}</div>
+    <div style="margin-top:8px;display:flex;gap:8px">
+      <button class="btn" onclick="confirmOrder('${o.id}')">تأكيد استلام</button>
+      <button class="btn-ghost" onclick="cancelOrder('${o.id}')">إلغاء</button>
+    </div>`;
+    ordersEl.appendChild(it);
+  })
+}
+
+function renderNotifications(){
+  notificationsEl.innerHTML='';
+  if(state.notifications.length===0) notificationsEl.innerHTML='<div class="small muted">لا توجد إشعارات</div>';
+  state.notifications.slice().reverse().forEach(n=>{
+    const d = document.createElement('div'); d.className='small muted'; d.textContent = `${n.time} — ${n.text}`;
+    notificationsEl.appendChild(d);
+  })
+}
+
+function updateUserUI(){
+  const u = state.user;
+  currentUserEl.textContent = u ? u.name : 'زائر';
+  userBalanceEl.textContent = u ? u.balance : '0';
+}
+
+/* ========== سلوك السلة / أوامر الدفع ========== */
+function addToCart(id,type){
+  const item = (type==='app' ? SAMPLE_APPS.find(a=>a.id===id) : SAMPLE_CREDITS.find(c=>c.id===id));
+  if(!item){ alert('خطأ: العنصر غير موجود'); return; }
+  state.cart.push({id:item.id, name:item.name || item.title, price:item.price, type});
+  openCartModal();
+}
+
+function openCartModal(){
+  const body = document.getElementById('modal-body');
+  document.getElementById('modal-title').textContent = 'سلة المشتريات';
+  body.innerHTML = '';
+  if(state.cart.length===0){ body.innerHTML = '<div class="small muted">السلة فارغة</div>'; showModal(); return; }
+  const list = document.createElement('div'); list.className='list';
+  let total = 0;
+  state.cart.forEach((c,idx)=>{
+    total += c.price;
+    const it = document.createElement('div'); it.className='item';
+    it.innerHTML = `<div><strong>${c.name}</strong><div class="small muted">${c.type}</div></div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <div class="small muted">${c.price} USD</div>
+        <button class="btn-ghost" onclick="removeFromCart(${idx})">حذف</button>
+      </div>`;
+    list.appendChild(it);
+  });
+  body.appendChild(list);
+  const footer = document.createElement('div'); footer.style.marginTop='12px';
+  footer.innerHTML = `<div class="small muted">المبلغ الإجمالي: <strong>${total} USD</strong></div>
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="btn" onclick="checkout()">ادفع الآن</button>
+      <button class="btn-ghost" onclick="clearCart()">تفريغ السلة</button>
+    </div>`;
+  body.appendChild(footer);
+  showModal();
+}
+
+function removeFromCart(idx){ state.cart.splice(idx,1); openCartModal(); }
+function clearCart(){ state.cart = []; openCartModal(); }
+
+function checkout(){
+  if(!state.user){ alert('يجب تسجيل الدخول لعمل طلب'); return; }
+  const total = state.cart.reduce((s,i)=>s+i.price,0);
+  // ننشئ طلباً جديداً
+  const id = 'ORD'+Date.now();
+  const order = {id, user:state.user.id, userName:state.user.name, items:state.cart.slice(), total, status:'بانتظار الدفع', time: new Date().toLocaleString(), note:''};
+  state.orders.push(order);
+  addNotification(`تم إنشاء طلب ${id} بقيمة ${total} USD من ${state.user.name}`);
+  // إرساله إلى بوت التلجرام (إن وُجد)
+  sendToTelegram(`🛒 طلب جديد\n#${id}\nالمستخدم: ${state.user.name}\nالمبلغ: ${total} USD\nالوقت: ${order.time}`);
+  state.cart = [];
+  saveState();
+  renderOrders(); renderNotifications(); updateUserUI();
+  alert('تم إنشاء الطلب وإشعار المدير في التلجرام (إن تم إعداد البوت).');
+  closeModal();
+}
+
+/* ========== أوامر الطلبات ========== */
+function confirmOrder(id){
+  const o = state.orders.find(x=>x.id===id);
+  if(!o) return;
+  o.status = 'مؤكد - تم التسليم';
+  addNotification(`تم تأكيد الطلب ${id}`);
+  sendToTelegram(`✅ تم تأكيد الطلب ${id} من قبل المشرف.`);
+  saveState(); renderOrders(); renderNotifications();
+}
+function cancelOrder(id){
+  if(!confirm('هل تريد بالفعل إلغاء الطلب؟')) return;
+  const o = state.orders.find(x=>x.id===id);
+  if(!o) return;
+  o.status = 'ملغى';
+  addNotification(`تم إلغاء الطلب ${id}`);
+  sendToTelegram(`❌ تم إلغاء الطلب ${id}.`);
+  saveState(); renderOrders(); renderNotifications();
+}
+
+/* ========== إشعارات ========== */
+function addNotification(text){
+  state.notifications.push({time:new Date().toLocaleString(), text});
+  renderNotifications();
+}
+
+/* ========== تسجيل و دخول (بسيط) ========== */
+function openLoginModal(){
+  document.getElementById('modal-title').textContent='تسجيل / تسجيل دخول';
+  const body = document.getElementById('modal-body');
+  body.innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <input id="reg-name" placeholder="اسم العرض (مثال: Ali)" />
+      <input id="reg-id" placeholder="اسم المستخدم (معرّف) - مثال: ali01" />
+      <input id="reg-pass" placeholder="كلمة السر" />
+      <div style="display:flex;gap:8px">
+        <button class="btn" id="do-register">تسجيل</button>
+        <button class="btn-ghost" id="do-login">دخول</button>
+      </div>
+      <div class="small muted">للوصول إلى لوحة المدير استخدم: admin / 1234</div>
+    </div>`;
+  showModal();
+
+  document.getElementById('do-register').onclick = ()=>{
+    const name = document.getElementById('reg-name').value.trim();
+    const id = document.getElementById('reg-id').value.trim();
+    const pass = document.getElementById('reg-pass').value.trim();
+    if(!id||!pass||!name){ alert('اكمل الحقول'); return; }
+    if(db.users[id]){ alert('اسم المستخدم موجود'); return; }
+    db.users[id] = {id,name,pass,balance:0,isAdmin:false};
+    state.user = db.users[id];
+    saveState();
+    addNotification(`انشأ حساب جديد: ${name}`);
+    updateUserUI(); renderNotifications(); closeModal();
+  }
+  document.getElementById('do-login').onclick = ()=>{
+    const id = document.getElementById('reg-id').value.trim();
+    const pass = document.getElementById('reg-pass').value.trim();
+    if(!id||!pass){ alert('اكمل الحقول'); return; }
+    const u = db.users[id];
+    if(!u || u.pass !== pass){ alert('بيانات غير صحيحة'); return; }
+    state.user = u;
+    addNotification(`تم تسجيل الدخول: ${u.name}`);
+    updateUserUI(); renderNotifications(); saveState(); closeModal();
+  }
+}
+
+/* ========== لوحة المدير البسيطة ========== */
+function openAdminModal(){
+  document.getElementById('modal-title').textContent='لوحة المدير';
+  const body = document.getElementById('modal-body');
+  body.innerHTML = `
+    <div class="admin-panel">
+      <div class="small muted">أضف/حذف رصيد لحساب المستخدم</div>
+      <div style="display:flex;gap:8px">
+        <input id="adm-userid" placeholder="معرّف المستخدم" /><input id="adm-amount" placeholder="المبلغ (+/-)" />
+        <button class="btn" id="adm-apply">تطبيق</button>
+      </div>
+      <div class="small muted">أوامر سريعة للطلبات</div>
+      <div style="display:flex;gap:8px">
+        <input id="adm-orderid" placeholder="رقم الطلب (ORD...)" />
+        <button class="btn" id="adm-mark-ready">وضع كمؤكد</button>
+      </div>
+      <div class="small muted">إرسال رسالة عامة للتلجرام</div>
+      <textarea id="adm-msg" rows="3" placeholder="نص الرسالة"></textarea>
+      <div style="display:flex;gap:8px">
+        <button class="btn" id="adm-send-tg">أرسل للتلجرام</button>
+        <button class="btn danger" id="adm-clear">مسح كل الطلبات (تجريبي)</button>
+      </div>
+    </div>
+  `;
+  showModal();
+
+  document.getElementById('adm-apply').onclick = ()=>{
+    const id = document.getElementById('adm-userid').value.trim();
+    const amount = parseFloat(document.getElementById('adm-amount').value || 0);
+    if(!id || !db.users[id]){ alert('المستخدم غير موجود'); return; }
+    db.users[id].balance = (db.users[id].balance||0) + amount;
+    addNotification(`تعديل رصيد ${id} بمقدار ${amount}`);
+    saveState(); updateUserUI(); renderNotifications();
+  };
+
+  document.getElementById('adm-mark-ready').onclick = ()=>{
+    const id = document.getElementById('adm-orderid').value.trim();
+    const o = state.orders.find(x=>x.id===id);
+    if(!o){ alert('الطلب غير موجود'); return; }
+    o.status = 'مؤكد من المدير';
+    addNotification(`الطلب ${id} تم تأكيده من المدير`);
+    saveState(); renderOrders(); renderNotifications();
+    sendToTelegram(`📣 إشعار: الطلب ${id} تم تأكيده من المدير`);
+  };
+
+  document.getElementById('adm-send-tg').onclick = ()=>{
+    const m = document.getElementById('adm-msg').value.trim();
+    if(!m) return alert('اكتب رسالة');
+    sendToTelegram(`📢 رسالة من المدير:\n${m}`);
+    alert('تم الإرسال (إذا كان التوكن و chat_id وضعا في الإعدادات)');
+  };
+
+  document.getElementById('adm-clear').onclick = ()=>{
+    if(!confirm('مسح كل الطلبات؟ هذا للإختبار فقط.')) return;
+    state.orders = [];
+    saveState(); renderOrders(); addNotification('تم مسح كل الطلبات (تجريبي)');
+    renderNotifications(); alert('تمت العملية');
+  };
+}
+
+/* ========== إرسال إلى تلجرام ========== */
+function sendToTelegram(text){
+  // يقرأ التوكن والـ chat من الإعدادات
+  const token = state.tg.token || tgTokenInput.value.trim();
+  const chat = state.tg.chat || tgChatInput.value.trim();
+  if(!token || !chat){
+    console.log('Telegram not configured. Message:', text);
+    return;
+  }
+  // ملاحظة: هذا مثال يستخدم fetch إلى API التلجرام. 
+  // يجب أن تدير التوكن بسرية، وتخزنها على الخادم إذا أردت أمانًا أعلى.
+  fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({chat_id:chat, text, parse_mode:'HTML'})
+  }).then(r=>r.json()).then(res=>{
+    if(res.ok) addNotification('تم إرسال إشعار إلى التلجرام');
+    else addNotification('فشل إرسال التلجرام (تحقق من التوكن/chat_id)');
+  }).catch(err=>{
+    console.error(err); addNotification('خطأ عند محاولة الاتصال بتلجرام');
+  });
+}
+
+/* ========== حفظ إعدادات التلجرام ========== */
+document.getElementById('save-tg').onclick = ()=>{
+  state.tg.token = tgTokenInput.value.trim();
+  state.tg.chat = tgChatInput.value.trim();
+  saveState();
+  addNotification('تم حفظ إعدادات التلجرام (محلياً)');
+  alert('تم الحفظ محليًا. تذكر: لا تضع التوكن في مكان عام.');
+}
+
+/* ========== إضافة رصيد بواسطة المستخدم (طلب) ========== */
+document.getElementById('submit-add').onclick = ()=>{
+  if(!state.user){ alert('سجل دخول أولاً'); return; }
+  const amt = parseFloat(document.getElementById('add-amount').value||0);
+  const method = document.getElementById('payment-method').value;
+  if(!amt || amt<=0){ alert('أدخل مبلغاً صالحاً'); return; }
+  const id = 'TOPUP'+Date.now();
+  const order = {id, user:state.user.id, userName:state.user.name, items:[{name:'إضافة رصيد',
