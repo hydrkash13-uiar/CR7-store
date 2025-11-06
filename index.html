@@ -1,190 +1,224 @@
-<!doctype html>
-<html lang="ar">
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>SOMA - قائمة جانبية</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>SOMA - المتجر</title>
 <style>
-  :root{
-    --bg:#0b0b0d; --panel:#0f1113; --accent:#1f2937; --gold:#d4af37; --muted:#9aa0a6;
-    --item-hover: rgba(255,255,255,0.03);
-  }
-  *{box-sizing:border-box}
-  body{margin:0;font-family: "Noto Naskh Arabic", Tahoma, Arial, sans-serif;direction:rtl;background:var(--bg);color:#fff;}
-  .layout{display:flex;min-height:100vh}
-  /* sidebar */
-  .sidebar{
-    width:320px;background:linear-gradient(180deg,var(--panel),#0b0b0d);padding:18px;box-shadow:2px 0 10px rgba(0,0,0,0.6);
-    display:flex;flex-direction:column;gap:16px;
-  }
-  .brand{display:flex;gap:12px;align-items:center}
-  .avatar{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,var(--gold),#f0c970);display:flex;align-items:center;justify-content:center;font-weight:800;color:#000}
-  .userinfo{flex:1}
-  .userinfo h2{margin:0;font-size:18px;color:var(--gold)}
-  .userinfo .sub{color:var(--muted);font-size:13px;margin-top:6px;display:flex;justify-content:space-between;align-items:center}
-  .vip{background:#132226;padding:4px 8px;border-radius:8px;font-size:12px;color:#8fe0d5}
-  .balance{font-weight:700;color:var(--gold);margin-top:12px;font-size:20px}
-
-  /* menu */
-  .menu{display:flex;flex-direction:column;gap:6px;margin-top:6px}
-  .menu-button{
-    display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px;border-radius:10px;background:transparent;border:1px solid rgba(255,255,255,0.02);
-    cursor:pointer;color:#fff;text-decoration:none;
-  }
-  .menu-button:hover{background:var(--item-hover)}
-  .menu-left{display:flex;gap:12px;align-items:center}
-  .icon{width:36px;height:36;border-radius:8px;background:rgba(255,255,255,0.03);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--muted)}
-  .label{font-size:16px}
-  .small{font-size:13px;color:var(--muted)}
-
-  /* footer controls */
-  .spacer{flex:1}
-  .footer{display:flex;flex-direction:column;gap:8px}
-  .toggle{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:8px;background:rgba(255,255,255,0.02)}
-  .toggle input{width:40px;height:20px}
-
-  /* main content */
-  main{flex:1;padding:20px}
-  .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
-  .search{background:rgba(255,255,255,0.02);padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,0.02)}
-  @media (max-width:900px){
-    .sidebar{position:fixed;left:0;top:0;bottom:0;transform:translateX(-100%);transition:transform .25s ease;z-index:999;padding-top:40px}
-    .sidebar.open{transform:translateX(0)}
-    .layout{flex-direction:column}
-    main{padding:12px}
+  body {
+    margin: 0;
+    background: #0d0d0d;
+    color: #fff;
+    font-family: "Tajawal", sans-serif;
   }
 
-  /* dark mode switch styling (visual only) */
-  .switch{position:relative;width:46px;height:26px;background:#222;border-radius:20px}
-  .dot{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:all .2s}
-  .switch.on{background:#89c4b7}
-  .switch.on .dot{left:23px}
+  header {
+    background: #000;
+    color: #ffd700;
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+    border-bottom: 2px solid #ffd700;
+  }
+
+  .logo {
+    font-size: 24px;
+    letter-spacing: 2px;
+  }
+
+  nav {
+    background: #111;
+    padding: 10px;
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 1px solid #333;
+  }
+
+  nav a {
+    color: #ccc;
+    text-decoration: none;
+    font-size: 14px;
+  }
+
+  nav a:hover {
+    color: #ffd700;
+  }
+
+  .banner {
+    background: #111;
+    text-align: center;
+    padding: 15px;
+  }
+
+  .banner img {
+    width: 100%;
+    border-radius: 10px;
+  }
+
+  .search {
+    text-align: center;
+    margin: 20px;
+  }
+
+  .search input {
+    width: 80%;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    background: #1a1a1a;
+    color: #fff;
+    text-align: right;
+  }
+
+  .sections {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    padding: 10px;
+  }
+
+  .section {
+    background: #1a1a1a;
+    border-radius: 12px;
+    text-align: center;
+    padding: 10px;
+    transition: 0.3s;
+  }
+
+  .section:hover {
+    background: #222;
+    transform: scale(1.05);
+  }
+
+  .section img {
+    width: 100%;
+    border-radius: 10px;
+  }
+
+  .section h3 {
+    margin-top: 10px;
+    font-size: 14px;
+  }
+
+  footer {
+    background: #000;
+    padding: 10px;
+    text-align: center;
+    font-size: 13px;
+    color: #999;
+    border-top: 1px solid #222;
+  }
+
+  /* القائمة الجانبية */
+  .menu {
+    position: fixed;
+    top: 0;
+    right: -280px;
+    width: 260px;
+    height: 100%;
+    background: #111;
+    color: #fff;
+    transition: 0.3s;
+    z-index: 100;
+    padding-top: 60px;
+  }
+
+  .menu.open {
+    right: 0;
+  }
+
+  .menu a {
+    display: block;
+    padding: 15px;
+    color: #ddd;
+    text-decoration: none;
+    border-bottom: 1px solid #222;
+  }
+
+  .menu a:hover {
+    background: #222;
+    color: #ffd700;
+  }
+
+  .menu-toggle {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: #ffd700;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 10px;
+    cursor: pointer;
+  }
+
+  .dark-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+  }
+
+  .dark-toggle input {
+    accent-color: #ffd700;
+  }
 </style>
 </head>
 <body>
 
-<div class="layout">
-  <aside class="sidebar" id="sidebar">
-    <div class="brand">
-      <div class="avatar">ح</div>
-      <div class="userinfo">
-        <h2 id="user-name">حيدر كاش <span class="small" style="margin-right:8px">#2240</span></h2>
-        <div class="sub">
-          <div class="vip">VIP1</div>
-          <div class="small">رصيد: <strong id="user-balance">$0.002</strong></div>
-        </div>
-        <div class="balance" id="user-balance-large">$0.002</div>
-      </div>
-    </div>
+<header>
+  <div class="logo">SOMA STORE</div>
+</header>
 
-    <nav class="menu" aria-label="القائمة الجانبية">
-      <a class="menu-button" href="#">
-        <div class="menu-left"><div class="icon">🏠</div><div class="label">الرئيسية</div></div>
-        <div class="small">الصفحة الرئيسية</div>
-      </a>
+<button class="menu-toggle" onclick="toggleMenu()">☰</button>
 
-      <a class="menu-button" href="#">
-        <div class="menu-left"><div class="icon">💰</div><div class="label">إضافة رصيد</div></div>
-        <div class="small">شحن رصيد لحسابك</div>
-      </a>
-
-      <a class="menu-button" href="#">
-        <div class="menu-left"><div class="icon">💳</div><div class="label">دفعاتي</div></div>
-        <div class="small">سجل المدفوعات</div>
-      </a>
-
-      <a class="menu-button" href="#">
-        <div class="menu-left"><div class="icon">💼</div><div class="label">محفظتي</div></div>
-        <div class="small">رصيد وعمليات</div>
-      </a>
-
-      <a class="menu-button" href="#">
-        <div class="menu-left"><div class="icon">🛒</div><div class="label">طلباتي</div></div>
-        <div class="small">الطلبات الحالية</div>
-      </a>
-
-      <a class="menu-button" href="#">
-        <div class="menu-left"><div class="icon">👥</div><div class="label">وكلاؤنا</div></div>
-        <div class="small">شركاؤنا</div>
-      </a>
-
-      <a class="menu-button" href="#">
-        <div class="menu-left"><div class="icon">🛡️</div><div class="label">الحماية</div></div>
-        <div class="small">إعدادات الأمان</div>
-      </a>
-
-      <a class="menu-button" href="#">
-        <div class="menu-left"><div class="icon">ℹ️</div><div class="label">من نحن</div></div>
-        <div class="small">معلومات عن SOMA</div>
-      </a>
-    </nav>
-
-    <div class="spacer"></div>
-
-    <div class="footer">
-      <div class="toggle">
-        <div class="small">الوضع الداكن</div>
-        <div id="dark-toggle" class="switch" role="switch" aria-checked="true"><div class="dot"></div></div>
-      </div>
-
-      <div style="display:flex;gap:8px">
-        <button id="open-btn" class="menu-button" style="flex:1;background:linear-gradient(90deg,var(--gold),#f0c970);color:#000">تسجيل / حسابي</button>
-        <button id="close-btn" class="menu-button" style="flex:1;background:transparent;border:1px solid rgba(255,255,255,0.03)">خروج</button>
-      </div>
-    </div>
-  </aside>
-
-  <main>
-    <div class="topbar">
-      <button id="menu-toggle" style="padding:8px 12px;border-radius:10px;background:rgba(255,255,255,0.03);border:none;color:#fff">☰ القائمة</button>
-      <div class="search">ابحث عن تطبيق أو رصيد...</div>
-    </div>
-
-    <section>
-      <h3>مرحبًا بك في SOMA</h3>
-      <p class="small" style="color:var(--muted)">هذه صفحة تجريبية تعرض قائمة جانبية مشابهة للتصميم الذي طلبته. يمكنك تعديل النصوص والروابط حسب الحاجة.</p>
-      <div style="margin-top:18px;">
-        <div style="background:rgba(255,255,255,0.02);padding:12px;border-radius:10px">محتوى الصفحة الرئيسي</div>
-      </div>
-    </section>
-  </main>
+<div class="menu" id="menu">
+  <a href="#">🏠 الرئيسية</a>
+  <a href="#">💰 إضافة رصيد</a>
+  <a href="#">💳 دفعاتي</a>
+  <a href="#">💼 محفظتي</a>
+  <a href="#">🛒 طلباتي</a>
+  <a href="#">🤝 وكلاؤنا</a>
+  <a href="#">🛡️ الحماية</a>
+  <a href="#">ℹ️ من نحن</a>
+  <div class="dark-toggle">
+    <span>الوضع الداكن</span>
+    <input type="checkbox" checked />
+  </div>
 </div>
 
+<div class="banner">
+  <img src="https://i.imgur.com/E4yRkBv.png" alt="banner">
+</div>
+
+<div class="search">
+  <input type="text" placeholder="بحث 🔍">
+</div>
+
+<div class="sections">
+  <div class="section">
+    <img src="https://i.imgur.com/dHgE1eY.png" alt="">
+    <h3>قسم الألعاب</h3>
+  </div>
+
+  <div class="section">
+    <img src="https://i.imgur.com/Y1fP5f3.png" alt="">
+    <h3>قسم الدردشة</h3>
+  </div>
+
+  <div class="section">
+    <img src="https://i.imgur.com/8byZsHS.png" alt="">
+    <h3>قسم الأرصدة</h3>
+  </div>
+</div>
+
+<footer>
+  جميع الحقوق محفوظة © 2025 SOMA
+</footer>
+
 <script>
-  // تفعيل فتح/غلق السايدبار على الموبايل
-  const sidebar = document.getElementById('sidebar');
-  const toggle = document.getElementById('menu-toggle');
-  toggle.addEventListener('click', ()=> sidebar.classList.toggle('open'));
-
-  // تبديل الوضع الداكن (تأثير تجريبي داخل الصفحة فقط)
-  const darkSwitch = document.getElementById('dark-toggle');
-  darkSwitch.addEventListener('click', ()=>{
-    darkSwitch.classList.toggle('on');
-    if(darkSwitch.classList.contains('on')){
-      document.documentElement.style.setProperty('--panel','#0f1113');
-      document.documentElement.style.setProperty('--bg','#050505');
-    } else {
-      document.documentElement.style.setProperty('--panel','#ffffff10');
-      document.documentElement.style.setProperty('--bg','#f5f7fa');
-      document.documentElement.style.setProperty('color','#000');
-    }
-  });
-
-  // إعداد عرض رصيد واسم مستخدم (يمكن تغييره ديناميكياً)
-  function setUser(name, id, vip, balance){
-    document.getElementById('user-name').innerHTML = name + ' <span class="small" style="margin-right:8px">#'+id+'</span>';
-    document.querySelector('.vip').textContent = vip;
-    document.getElementById('user-balance').textContent = '$' + balance;
-    document.getElementById('user-balance-large').textContent = '$' + balance;
-    document.querySelector('.avatar').textContent = name.charAt(0) || 'ح';
+  function toggleMenu() {
+    document.getElementById("menu").classList.toggle("open");
   }
-
-  // مثال تعبئة البيانات
-  setUser('حيدر كاش', '2240', 'VIP1', '0.002');
-
-  // الأزرار السفلية (أمثلة)
-  document.getElementById('open-btn').addEventListener('click', ()=> alert('افتح صفحة الحساب / تسجيل الدخول'));
-  document.getElementById('close-btn').addEventListener('click', ()=> alert('تم تسجيل الخروج (تجريبي)'));
 </script>
 
 </body>
