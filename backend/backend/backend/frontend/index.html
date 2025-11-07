@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>SOMA Store</title>
+<style>
+  /* (احتفظ بنفس CSS السابق مع تعديلات بسيطة) */
+  body{margin:0;background:#0d0d0d;color:#fff;font-family:Tajawal, sans-serif}
+  header{background:#000;color:#ffd700;padding:10px;text-align:center;font-weight:bold;border-bottom:2px solid #ffd700}
+  .logo{font-size:22px}
+  .menu-toggle{position:fixed;top:10px;right:10px;background:#ffd700;border:none;padding:8px;border-radius:6px}
+  .menu{position:fixed;top:0;right:-300px;width:280px;height:100%;background:#111;padding-top:60px;transition:.25s;z-index:100}
+  .menu.open{right:0}
+  .menu a{display:block;padding:12px;color:#ddd;text-decoration:none;border-bottom:1px solid #222}
+  .banner{padding:12px;text-align:center}
+  .search{padding:12px;text-align:center}
+  .sections{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:12px}
+  .section{background:#1a1a1a;border-radius:10px;padding:10px;text-align:center}
+  .auth{display:flex;gap:8px;justify-content:center;margin:10px}
+  input,button,select{padding:8px;border-radius:8px;border:none}
+  .small{color:#9aa0a6;font-size:13px}
+</style>
+</head>
+<body>
+<header><div class="logo">SOMA STORE</div></header>
+<button class="menu-toggle" id="menuBtn">☰</button>
+
+<!-- sidebar -->
+<div class="menu" id="menu">
+  <div style="padding:12px;color:#ffd700;font-weight:700">حسابك</div>
+  <div id="userBox" style="padding:12px;border-bottom:1px solid #222">
+    <div id="uName" style="font-weight:700">زائر</div>
+    <div class="small" id="uSerial">#----</div>
+    <div style="margin-top:8px;font-weight:800;color:#ffd700" id="uBalance">$0</div>
+  </div>
+
+  <a href="#" onclick="openRegister()">تسجيل</a>
+  <a href="#" onclick="openLogin()">تسجيل دخول</a>
+  <a href="#" onclick="openTopup()">💰 إضافة رصيد</a>
+  <a href="#" onclick="openOrders()">🛒 طلباتي</a>
+  <a href="#" onclick="openWallet()">💼 محفظتي</a>
+  <a href="#" onclick="openAgents()">🤝 وكلاؤنا</a>
+  <a href="#" onclick="openProtection()">🛡️ الحماية</a>
+  <a href="#" onclick="openAbout()">ℹ️ من نحن</a>
+
+  <div style="padding:12px;border-top:1px solid #222">
+    الوضع الداكن <input type="checkbox" checked/>
+  </div>
+</div>
+
+<div class="banner">
+  <img src="https://i.imgur.com/E4yRkBv.png" style="width:95%;border-radius:8px"/>
+</div>
+
+<div class="auth">
+  <div><button onclick="openRegister()">إنشاء حساب</button></div>
+  <div><button onclick="openLogin()">دخول</button></div>
+</div>
+
+<div class="search">
+  <input id="q" placeholder="ابحث عن تطبيق أو رصيد..." style="width:85%;background:#1a1a1a;color:#fff;border-radius:8px;padding:10px"/>
+</div>
+
+<div class="sections" id="sections">
+  <div class="section"><img src="https://i.imgur.com/dHgE1eY.png" style="width:100%;border-radius:8px"/><h3>قسم الألعاب</h3></div>
+  <div class="section"><img src="https://i.imgur.com/Y1fP5f3.png" style="width:100%;border-radius:8px"/><h3>قسم الدردشة</h3></div>
+  <div class="section"><img src="https://i.imgur.com/8byZsHS.png" style="width:100%;border-radius:8px"/><h3>قسم الأرصدة</h3></div>
+</div>
+
+<!-- modal area -->
+<div id="modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);align-items:center;justify-content:center;z-index:200">
+  <div style="background:#0b0b0b;padding:14px;border-radius:10px;max-width:420px;margin:auto">
+    <div id="modalBody"></div>
+    <div style="text-align:left;margin-top:10px"><button onclick="closeModal()">إغلاق</button></div>
+  </div>
+</div>
+
+<script>
+  // API base - ضع رابط الخادم هنا بعد نشره (مثلاً https://your-app.onrender.com)
+  const API_BASE = 'https://YOUR_BACKEND_URL_HERE'; // <-- غيّر هذا بعد النشر
+
+  const menu = document.getElementById('menu');
+  document.getElementById('menuBtn').addEventListener('click', ()=> menu.classList.toggle('open'));
+
+  // modal helpers
+  function openModal(html){ document.getElementById('modalBody').innerHTML = html; document.getElementById('modal').style.display='flex'; }
+  function closeModal(){ document.getElementById('modal').style.display='none'; }
+
+  // register/login UI
+  function openRegister(){
+    openModal(`<h3>تسجيل حساب</h3>
+      <input id="r_name" placeholder="اسم العرض" style="width:100%;margin:6px 0"/><br/>
+      <input id="r_user" placeholder="معرف المستخدم" style="width:100%;margin:6px 0"/><br/>
+      <input id="r_pass" placeholder="كلمة المرور" type="password" style="width:100%;margin:6px 0"/><br/>
+      <button onclick="doRegister()">تسجيل</button>`);
+  }
+  async function doRegister(){
+    const name = document.getElementById('r_name').value.trim();
+    const user = document.getElementById('r_user').value.trim();
+    const pass = document.getElementById('r_pass').value.trim();
+    if(!name||!user||!pass) return alert('اكمل الحقول');
+    const res = await fetch(API_BASE + '/api/register', {
+      method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({display_name:name, username:user, password:pass})
+    });
+    const data = await res.json();
+    if(!data.ok) return alert('خطأ: '+(data.error||''));
+    localStorage.setItem('soma_token', data.token);
+    setUserUI(data.user);
+    closeModal();
+    alert('تم التسجيل');
+  }
+
+  function openLogin(){
+    openModal(`<h3>تسجيل دخول</h3>
+      <input id="l_user" placeholder="المعرف" style="width:100%;margin:6px 0"/><br/>
+      <input id="l_pass" placeholder="كلمة المرور" type="password" style="width:100%;margin:6px 0"/><br/>
+      <button onclick="doLogin()">دخول</button>`);
+  }
+  async function doLogin(){
+    const user = document.getElementById('l_user').value.trim();
+    const pass = document.getElementById('l_pass').value.trim();
+    if(!user||!pass) return alert('اكمل الحقول');
+    const res = await fetch(API_BASE + '/api/login', {
+      method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({username:user, password:pass})
+    });
+    const data = await res.json();
+    if(!data.ok) return alert('خطأ: '+(data.error||''));
+    localStorage.setItem('soma_token', data.token);
+    setUserUI(data.user);
+    closeModal();
+    alert('تم تسجيل الدخول');
+  }
+
+  // set UI
+  function setUserUI(user){
+    if(!user) return;
+    document.getElementById('uName').textContent = user.display_name || user.username;
+    document.getElementById('uSerial').textContent = '#' + (user.serial || '----');
+    document.getElementById('uBalance').textContent = '$' + (user.balance || 0);
+  }
+
+  async function loadMe(){
+    const token = localStorage.getItem('soma_token');
+    if(!token) return;
+    const res = await fetch(API_BASE + '/api/me', { headers: { Authorization: 'Bearer ' + token }});
+    if(!res.ok){ console.log('not logged'); return; }
+    const data = await res.json();
+    if(data.ok) setUserUI(data.user);
+  }
+
+  // orders/topup examples
+  function openTopup(){
+    openModal(`<h3>طلب إضافة رصيد</h3>
+      <input id="tp_amount" placeholder="المبلغ" style="width:100%;margin:6px 0"/><br/>
+      <select id="tp_method" style="width:100%;margin:6px 0"><option value="transfer">تحويل بنكي</option><option value="paypal">Paypal</option></select>
+      <button onclick="doTopup()">أرسل طلب</button>`);
+  }
+  async function doTopup(){
+    const amount = parseFloat(document.getElementById('tp_amount').value || 0);
+    const method = document.getElementById('tp_method').value;
+    if(!amount || amount<=0) return alert('المبلغ غير صالح');
+    const token = localStorage.getItem('soma_token');
+    if(!token) return alert('سجل دخول أولاً');
+    const res = await fetch(API_BASE + '/api/topup', {
+      method:'POST', headers:{'Content-Type':'application/json', 'Authorization':'Bearer ' + token},
+      body: JSON.stringify({amount, method})
+    });
+    const data = await res.json();
+    if(data.ok) { alert('تم إرسال طلب إضافة الرصيد'); closeModal(); }
+    else alert('خطأ: ' + (data.error||''));
+  }
+
+  // init
+  loadMe();
+</script>
+</body>
+  </html>
